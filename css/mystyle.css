@@ -1,0 +1,23 @@
+.db{
+	height:250px;
+	width:380px;
+	overflow:auto;
+	
+	border:1px solid #d9edf7;
+	border-right:none;
+}
+
+.del-class{
+	float:right;
+	cursor:pointer;
+	color:#ff7777;
+}
+
+.hilight{
+	text-decoration:underline;
+}
+
+.hilight-non{
+	text-decoration:none;
+}
+
