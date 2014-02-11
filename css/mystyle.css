@@ -13,11 +13,6 @@
 	color:#ff7777;
 }
 
-.hilight{
-	text-decoration:underline;
-}
+.hilight{text-decoration:underline;}
 
-.hilight-non{
-	text-decoration:none;
-}
-
+.hilight-non{text-decoration:none;}

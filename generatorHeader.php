@@ -17,5 +17,29 @@ if( isset($_GET['download']) && !empty($_GET['download']) ){
 }
 
 if( isset($_GET['dl_all']) && !empty($_GET['dl_all']) ){
-//	ClassGenerator::downloadAll($_GET['dl_all']);
+	
+	
+	if( count(array_diff(scandir('temp'),array('.','..'))) != 0 )
+	{
+		$zip = new ZipArchive();
+		$name = "classes".time().".zip";
+		$filename = 'temp/'.$name;
+		
+		if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
+			exit("cannot open <$filename>\n");
+		}
+		
+		foreach( array_diff(scandir('temp'),array('.','..')) as $key => $file ){
+			if( strripos($file,".zip") < -1 ){
+				$zip->addFile('temp/'.$file);
+			}
+		}
+		
+		echo "numfiles: " . $zip->numFiles . "\n";
+		echo "status:" . $zip->status . "\n";
+		$zip->close();
+		
+		ClassGenerator::download($name);
+		ClassGenerator::delete($name); 
+	}
 }

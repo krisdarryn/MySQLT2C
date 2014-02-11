@@ -26,13 +26,13 @@
 		<h3>Generated Class(es)</h3><span id="label" style="float:right"></span>
 		<p id="genlist">List of Generated Class(es)</p>
 		
-		<span class="btn btn-link" id="gen-clear-all">Clear Generated Class(es)</span><a href="generate.php?dl_all=true" id="dl-all" style="margin-left:100px;">Download All</a>
+		<span class="btn btn-link" id="gen-clear-all">Clear Generated Class(es)</span><a href="generator.php?dl_all=true" id="dl-all" style="margin-left:100px;">Download All</a>
 		<!-- end list of generated class(es) -->
 	</div>
 	
 	<!--right-->
 	<div class="container  pull-right col-md-8">
-		<div class="panel panel-info">
+		<div class="panel panel-success">
 			<div class="panel-heading">
 				<h3 id="table-name">Table Name</h3>
 				<a href="" class="download">Download </a>

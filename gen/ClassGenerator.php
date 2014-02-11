@@ -41,7 +41,9 @@ class ClassGenerator{
 		$str = '';
 		
 		foreach( array_diff(scandir(self::DIR),array('.','..')) as $key => $file ){
+			if( strripos($file,".zip") < -1 ){
 				$str .= "<li><a href='' id='genClass'>$file</a><span class='del-class'>delete</span></li>";
+			}
 		}
 		return $str;
 	}

@@ -1,5 +1,6 @@
 $(document).ready(function(){ reloadClassList(true); });
 
+//custom design
 $(document).delegate('.del-class','mouseenter mouseleave',function(){
 	if( $(this).siblings().hasClass('hilight') ){
 		$(this).siblings().addClass('hilight-non');
