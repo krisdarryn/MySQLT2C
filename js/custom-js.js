@@ -53,10 +53,11 @@ $('a').filter('#table').click(function(e){
 	$('.panel-body').html('<h4>Generating Class <img src="loader24.gif"> ...</h4>');
 	
 	$.get('gen/ajaxGen.php',{tableData:tableName},function(result){
-		$('#table-name').text(for_tableName);
-		$('.download').attr('href','generator.php?download='+for_tableName);
+      
+		$('#table-name').text(result.className);
+		$('.download').attr('href','generator.php?download=' + result.className + '.php');
 		$('.panel-body').empty();
-		$('.panel-body').html('<pre>'+result+'</pre>');
+		$('.panel-body').html('<pre>'+result.classContent+'</pre>');
 		
 		reloadClassList(true);
 	});

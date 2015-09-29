@@ -1,6 +1,10 @@
 <?php
-	include_once 'helper/Session.php';
+   ini_set('display_errors',1);
+   ini_set('display_startup_errors',1);
+   error_reporting(-1);
 	
+   include_once 'helper/Session.php';
+   
 	if(!Session::isSessionEmpty()){
 		header('Location:generator.php');
 	} 

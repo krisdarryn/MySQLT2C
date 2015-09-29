@@ -19,8 +19,7 @@ if( isset($_GET['download']) && !empty($_GET['download']) ){
 if( isset($_GET['dl_all']) && !empty($_GET['dl_all']) ){
 	
 	
-	if( count(array_diff(scandir('temp'),array('.','..'))) != 0 )
-	{
+	if( count(array_diff(scandir('temp'),array('.','..'))) != 0 ) {
 		$zip = new ZipArchive();
 		$name = "classes".time().".zip";
 		$filename = 'temp/'.$name;
@@ -35,8 +34,8 @@ if( isset($_GET['dl_all']) && !empty($_GET['dl_all']) ){
 			}
 		}
 		
-		echo "numfiles: " . $zip->numFiles . "\n";
-		echo "status:" . $zip->status . "\n";
+		/* echo "numfiles: " . $zip->numFiles . "\n";
+		echo "status:" . $zip->status . "\n"; */
 		$zip->close();
 		
 		ClassGenerator::download($name);

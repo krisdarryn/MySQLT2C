@@ -5,14 +5,25 @@ include_once 'ClassGenerator.php';
 
 	if(isset($_GET['tableData']) && !empty($_GET['tableData'])){
 		$db = new Database();
-		$res = $db->getTableStructure($_GET['tableData']);
+		$res = $db->getTableStructure($_GET['tableData']);   
 		$genClass = new ClassGenerator($res,$_GET['tableData']);
-	
+      
+      header("Content-Type: application/json");
+      
 		if($genClass->generateClass()){
-				
-			echo $genClass->getGenClassContent($_GET['tableData']);
+			$class = $genClass->getGenClassContent(ClassGenerator::strToCamelCase($_GET['tableData']));	
+			
+         $data = json_encode(array(
+            'classContent' => $class,
+            'className' => ClassGenerator::strToCamelCase($_GET['tableData'])
+         ));
+         
+         print_r($data);
+         exit;
 		}
+      
 		exit();
+      
 	} else if(isset($_GET['renFile']) && !empty($_GET['renFile'])){
 		echo ClassGenerator::getGenClassContent($_GET['renFile']);
 	} else if(isset($_GET['reload']) && !empty($_GET['reload'])){
