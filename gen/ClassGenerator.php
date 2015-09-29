@@ -41,7 +41,7 @@ class ClassGenerator{
 		$str = '';
 		
 		foreach( array_diff(scandir(self::DIR),array('.','..')) as $key => $file ){
-			if( strripos($file,".zip") < -1 ){
+			if( (strripos($file,".zip") < -1) && ($file !== 'README.txt') ){
 				$str .= "<li><a href='' id='genClass'>$file</a><span class='del-class'>delete</span></li>";
 			}
 		}
@@ -80,7 +80,9 @@ class ClassGenerator{
 	
 	public static function deleteAll(){
 		foreach( array_diff(scandir(self::DIR),array('.','..')) as $key => $file ){
-				ClassGenerator::delete($file);
+				if ($file !== 'README.txt') {
+               ClassGenerator::delete($file);
+            }
 		}
 		
 		return true;
