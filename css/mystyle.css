@@ -6,13 +6,29 @@
 	border:1px solid #d9edf7;
 	border-right:none;
 }
-
 .del-class{
 	float:right;
 	cursor:pointer;
 	color:#ff7777;
 }
-
 .hilight{text-decoration:underline;}
-
 .hilight-non{text-decoration:none;}
+.class-properties-wrapper {
+    
+}
+.btn-class-prop {
+    display: block;
+    position: relative;
+    color: #fff;
+}
+.btn-class-prop:hover {
+    color: #fff;
+}
+.btn-class-prop:focus {
+    color: #fff;
+}
+.cp-indicator {
+    position: absolute;
+    top: 4px;
+    right: 12px;
+}

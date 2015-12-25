@@ -4,6 +4,8 @@ class ClassGenerator{
 	
 	const DIR = "../temp";
 	
+    private $options;
+    
 	private static $datatypes = array(
 			'int','tinyint','smallint','mediumint','bigint','float','double','decimal',
 			'date','datetime','timestamp','time','year',
@@ -14,7 +16,7 @@ class ClassGenerator{
 	
 	public $tablename;
 	
-	public function __construct($arrg = null,$tablename = null){
+	public function __construct($arrg = null,$tablename = null, $options = array()){
 		
 		if($arrg != null){
 			foreach($arrg as $key => $val){
@@ -25,10 +27,14 @@ class ClassGenerator{
 		if($tablename != null){
 			$this->tablename = $tablename;
 		}
+        
+        if (!empty($options)) {
+            $this->options = $options;
+        }
 	}
 	
 	public function generateClass(){
-		$a = new ContentMaker($this->tablename,$this->tableStructure);
+		$a = new ContentMaker($this->tablename,$this->tableStructure, $this->options);
 		$file = fopen(self::DIR."/" . self::strToCamelCase($this->tablename) . ".php","w");
 		fwrite($file,$a->__toString());
 		fclose($file);
@@ -100,49 +106,87 @@ class ContentMaker{
 	
 	private $str;
 	
-	public function __construct($name = null,$fields = null){
-		$this->str .= $this->header();
+    private $options;
+    
+	public function __construct($name = null,$fields = null, $options) {
+		$this->options = $options;
+        $this->str .= $this->header();
 		$this->str .= $this->classHeader($name);
-      
-		// Setting class field
-		$this->str .= "\t/**\n";
-		$this->str .= "\t * Fields\n";
-		$this->str .= "\t */\n";
-		foreach($fields as $key => $field){
-			$this->str .= $this->setField(strtolower($key));
-		}
+            
+        // Setting class field
+        $this->str .= "\t/**\n";
+        $this->str .= "\t * Fields\n";
+        $this->str .= "\t */\n";
+        foreach($fields as $key => $field){
+            $this->str .= $this->setField(strtolower($key));
+        }
 		
-      // Constructor
-		$this->str .= "\n\t/**\n";
-		$this->str .= "\t * Class constructor\n";
-		$this->str .= "\t */\n";
-      $this->str .= $this->constuctor();
+        // Constructor
+        $this->str .= "\n\t/**\n";
+        $this->str .= "\t * Class constructor\n";
+        $this->str .= "\t */\n";
+        $this->str .= $this->constuctor();
 		
-      // Setting setters
-		$this->str .= "\t/**\n";
-		$this->str .= "\t * Setters\n";
-		$this->str .= "\t */\n";
-		foreach($fields as $key => $field){
-			$this->str .= $this->setSetter(strtolower($key));
-		}
-      
-		// Setting getters
-		$this->str .= "\t/**\n";
-		$this->str .= "\t * Getters\n";
-		$this->str .= "\t */\n";
-		foreach($fields as $key => $field){
-			$this->str .= $this->setGetter(strtolower($key));
-		}
+        if (isset($this->options['setters']) && ($this->options['setters'] === 'true')) {
+            
+            // Setting setters
+            $this->str .= "\t/**\n";
+            $this->str .= "\t * Setters\n";
+            $this->str .= "\t */\n";
+            foreach($fields as $key => $field){
+                $this->str .= $this->setSetter(strtolower($key));
+            }
+        }
+        
+        if (isset($this->options['getters']) && ($this->options['getters'] === 'true')) {
+            
+            // Setting getters
+            $this->str .= "\t/**\n";
+            $this->str .= "\t * Getters\n";
+            $this->str .= "\t */\n";
+            foreach($fields as $key => $field){
+                $this->str .= $this->setGetter(strtolower($key));
+            }
+        }
+        
 		$this->str .= $this->classFooter();
 	}
 	
 	private function header() { return "<?php\n\n"; }
-	private function classHeader($name){ return "class " . ClassGenerator::strToCamelCase($name)  . " {\n\n\n"; }
-	private function setField($field){ return "\tprivate $$field\n"; }
-	private function constuctor(){ return "\tpublic function __construct() {\n\t}\n\n"; }
-	private function setSetter($field){ return "\tpublic function set".ucfirst($field)."($$field) {\n\t\t\$this->$field = $$field;\n\t}\n\n"; }
-	private function setGetter($field){ return "\tpublic function get".ucfirst($field)."($$field) {\n\t\t return \$this->$field;\n\t}\n\n"; }
-	private function classFooter(){ return "}"; }
+	
+    private function classHeader($name){ 
+        $header = "class " . ClassGenerator::strToCamelCase($name);
+        
+        if (isset($this->options['classExtend']) && !empty($this->options['classExtend'])) {
+            $header .= " extends {$this->options['classExtend']}";
+        }
+        
+        if (isset($this->options['intefaces']) && !empty($this->options['intefaces'])) {
+            $header .= " implements {$this->options['intefaces']}";
+        }
+       
+        return "{$header} {\n\n\n"; 
+    }
+	
+    private function setField($field) { 
+        return "\tprivate $$field\n"; 
+    }
+	
+    private function constuctor() { 
+        return "\tpublic function __construct() {\n\t}\n\n"; 
+    }
+	
+    private function setSetter($field) { 
+        return "\tpublic function set".ucfirst($field)."($$field) {\n\t\t\$this->$field = $$field;\n\t}\n\n"; 
+    }
+	
+    private function setGetter($field) { 
+        return "\tpublic function get".ucfirst($field)."($$field) {\n\t\t return \$this->$field;\n\t}\n\n"; 
+    }
+	
+    private function classFooter() { 
+        return "}"; 
+    }
 	
 	public function __toString(){
 		return $this->str;

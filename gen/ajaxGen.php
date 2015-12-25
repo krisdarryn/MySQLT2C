@@ -6,7 +6,7 @@ include_once 'ClassGenerator.php';
 	if(isset($_GET['tableData']) && !empty($_GET['tableData'])){
 		$db = new Database();
 		$res = $db->getTableStructure($_GET['tableData']);   
-		$genClass = new ClassGenerator($res,$_GET['tableData']);
+		$genClass = new ClassGenerator($res, $_GET['tableData'], $_GET);
       
       header("Content-Type: application/json");
       

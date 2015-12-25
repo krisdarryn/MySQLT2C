@@ -1,4 +1,17 @@
-$(document).ready(function(){ reloadClassList(true); });
+var $setter = null;
+var $getter = null;
+var $classExtend = null;
+var $intefaces = null;
+
+
+$(document).ready(function() { 
+    $setter = $('#with-setters');
+    $getter = $('#with-getters');
+    $classExtend = $('#extend-class');
+    $intefaces = $('#implement-interface');
+    
+    reloadClassList(true); 
+});
 
 //custom design
 $(document).delegate('.del-class','mouseenter mouseleave',function(){
@@ -38,41 +51,48 @@ $('#gen-clear-all').click(function(){
 function clear(){
 	$('#table-name').text("Table Name");
 	$('.download').attr('href','');
-	$('.panel-body').empty();
-	$('.panel-body').html('<pre>\nSelect a table</pre>');
+	$('#gen-class-content').empty();
+	$('#gen-class-content').html('<pre>\nSelect a table</pre>');
 	$('#label').empty();
 }
 
 //generating class
-$('a').filter('#table').click(function(e){
+$(document).on('click', '.table-item', function(e) {
 	e.preventDefault();
 	var tableName = $(this).text();
 	var for_tableName = tableName[0].toUpperCase()+tableName.substr(1,tableName.length)+".php";
-	
+	var postData = {
+        tableData:tableName,
+        setters: $setter.prop('checked'),
+        getters: $getter.prop('checked'),
+        classExtend: $classExtend.val(),
+        intefaces: $intefaces.val()
+    };
+    
 	$('#table-name').text("Generating...");
-	$('.panel-body').html('<h4>Generating Class <img src="loader24.gif"> ...</h4>');
+	$('#gen-class-content').html('<h4>Generating Class <img src="loader24.gif"> ...</h4>');
 	
-	$.get('gen/ajaxGen.php',{tableData:tableName},function(result){
+	$.get('gen/ajaxGen.php', postData, function(result){
       
 		$('#table-name').text(result.className);
 		$('.download').attr('href','generator.php?download=' + result.className + '.php');
-		$('.panel-body').empty();
-		$('.panel-body').html('<pre>'+result.classContent+'</pre>');
+		$('#gen-class-content').empty();
+		$('#gen-class-content').html('<pre>'+result.classContent+'</pre>');
 		
 		reloadClassList(true);
 	});
-});
+});  
 
 //generate all classes
 $('#gen-all').click(function(e){
 	e.preventDefault();
 	
 	$('#table-name').text("Generating...");
-	$('.panel-body').html('<h4>Generating all table(s) to Class(es) <img src="loader24.gif"> ...</h4>');
+	$('#gen-class-content').html('<h4>Generating all table(s) to Class(es) <img src="loader24.gif"> ...</h4>');
 	
 	$.get('gen/ajaxGen.php',{all:true},function(result){	
-		$('.panel-body').empty();
-		$('.panel-body').html('<pre>Done!</pre>');
+		$('#gen-class-content').empty();
+		$('#gen-class-content').html('<pre>Done!</pre>');
 		$('#table-name').text("Table Name");
 		
 		reloadClassList(true);
@@ -87,8 +107,8 @@ $(document).delegate('#genClass','click',function(e){
 	
 	$.get('gen/ajaxGen.php',{renFile:genClass},function(result,textStatus,xhr){
 		$('.download').attr('href','generator.php?download='+genClass);
-		$('.panel-body').empty();
-		$('.panel-body').html('<pre>'+result+'</pre>');
+		$('#gen-class-content').empty();
+		$('#gen-class-content').html('<pre>'+result+'</pre>');
 	}); 
 });
 
