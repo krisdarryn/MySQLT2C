@@ -86,11 +86,18 @@ $(document).on('click', '.table-item', function(e) {
 //generate all classes
 $('#gen-all').click(function(e){
 	e.preventDefault();
-	
+	var postData = {
+        all:true,
+        setters: $setter.prop('checked'),
+        getters: $getter.prop('checked'),
+        classExtend: $classExtend.val(),
+        intefaces: $intefaces.val()
+    };
+    
 	$('#table-name').text("Generating...");
 	$('#gen-class-content').html('<h4>Generating all table(s) to Class(es) <img src="loader24.gif"> ...</h4>');
 	
-	$.get('gen/ajaxGen.php',{all:true},function(result){	
+	$.get('gen/ajaxGen.php', postData, function(result){	
 		$('#gen-class-content').empty();
 		$('#gen-class-content').html('<pre>Done!</pre>');
 		$('#table-name').text("Table Name");
@@ -103,6 +110,7 @@ $('#gen-all').click(function(e){
 $(document).delegate('#genClass','click',function(e){
 	e.preventDefault();
 	var genClass = $(this).text();
+    
 	$('#table-name').text(genClass);
 	
 	$.get('gen/ajaxGen.php',{renFile:genClass},function(result,textStatus,xhr){

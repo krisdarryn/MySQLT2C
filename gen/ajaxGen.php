@@ -37,7 +37,7 @@ include_once 'ClassGenerator.php';
 		
 		foreach($db->listTables() as $table){
 			$res  = $db->getTableStructure($table);
-			$genClass = new ClassGenerator($res,$table);
+			$genClass = new ClassGenerator($res,$table, $_GET);
 		
 			$genClass->generateClass();
 		}
